@@ -1,4 +1,5 @@
 import db from '../db.js';
+import { createAccessToken } from '../libs/jwt.js';
 
 const registerUser = (req) =>{
     return new Promise((resolve, reject)=>{
@@ -12,10 +13,11 @@ const registerUser = (req) =>{
     });
 };
 
-const validarUsuario = (req) =>{
-    return new Promise((resolve, reject)=>{
+
+const idUsuario = (req) =>{
+        return new Promise((resolve, reject)=>{
         const {Username, Pasword}=req;
-        db.query("call Login(?,?)",[Username, Pasword],  (error, elements)=>{
+        db.query("call Buscar_idUsuario(?,?)",[Username, Pasword],  (error, elements)=>{
             if(error){
                 return reject(error);
             }
@@ -24,23 +26,58 @@ const validarUsuario = (req) =>{
     });
 };
 
+
+const validarUsuario = (req) =>{
+    return new Promise((resolve, reject)=>{
+        const {Username, Pasword}=req;
+        db.query("call Buscar_idUsuario(?,?)",[Username, Pasword],  (error, elements)=>{
+            if(error){
+                return reject(error);
+            }
+            return resolve(elements);
+        });
+    });
+};
+
+
 export const register= async (req, res, next)=>{
     try {
         const resultElements = await registerUser(req.body);
-        res.status(200).json({elements: resultElements}); 
+        res.json({elements: resultElements}); 
     } catch(e) {
         console.log(e); 
         res.sendStatus(500);
     }
 };
 
+
 export const login= async (req, res, next)=>{
     try {
         const resultElements = await validarUsuario(req.body);
-        res.status(200).json({elements: resultElements[0]});
-        
+        //res.json({resultElements});
+        if(!(typeof(resultElements[0][0])==='undefined')) {  
+            
+            const token = await createAccessToken({id:resultElements[0][0].Id_usuario});
+            
+            res.cookie("token",token);
+            res.json({resultElements});
+            console.log(token);
+            //console.log(resultElements[0][0].Id_usuario);
+        }else{
+            console.log("Error de Autenticacion")
+        }
     } catch(e) {
         console.log(e); 
         res.sendStatus(500);
     }
 };
+
+
+
+export const logout= async (req, res, next)=>{
+    res.cookie('token','', {
+        expires:new Date(0),
+    });
+    return res.sendStatus(200);
+};
+
