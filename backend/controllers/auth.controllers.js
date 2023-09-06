@@ -1,25 +1,46 @@
 import db from '../db.js';
 
-export const register = async (req,res)=>{
-    const {Ci, Nombre, App, Apm,Username, Pasword}=req.body;
-    try {
-        const {userSaved}=await db.query("call crear_usuario(?,?,?,?,?,?)",[Ci, Nombre, App, Apm,Username, Pasword])
-        //await db.query("INSERT INTO persona (Ci, Nombre, App, Apm,created_at) VALUES (?,?,?,?, NOW())",[Ci, Nombre, App, Apm])
-        //console.log(Ci, Nombre, App, Apm,Username, Pasword);
-        res.json({userSaved});
-    } catch (error) {
-        console.log(error);
-        
-    }
-   
-    
+const registerUser = (req) =>{
+    return new Promise((resolve, reject)=>{
+        const {Ci, Nombre, App, Apm,Username, Pasword}=req;
+        db.query("call crear_usuario(?,?,?,?,?,?)",[Ci, Nombre, App, Apm,Username, Pasword],  (error, elements)=>{
+            if(error){
+                return reject(error);
+            }
+            return resolve(elements);
+        });
+    });
 };
-export const login = (req,res)=>{};
 
+const validarUsuario = (req) =>{
+    return new Promise((resolve, reject)=>{
+        const {Username, Pasword}=req;
+        db.query("call Login(?,?)",[Username, Pasword],  (error, elements)=>{
+            if(error){
+                return reject(error);
+            }
+            return resolve(elements);
+        });
+    });
+};
 
-export const getCustomer = async (req,res)=>{
-    const {rows} = await db.query("select * from cliente");
-    console.log(Ci, Nombre, App, Apm,Username, Pasword);
-    res.send({rows});
-    
+export const register= async (req, res, next)=>{
+    try {
+        const resultElements = await registerUser(req.body);
+        res.status(200).json({elements: resultElements}); 
+    } catch(e) {
+        console.log(e); 
+        res.sendStatus(500);
+    }
+};
+
+export const login= async (req, res, next)=>{
+    try {
+        const resultElements = await validarUsuario(req.body);
+        res.status(200).json({elements: resultElements[0]});
+        
+    } catch(e) {
+        console.log(e); 
+        res.sendStatus(500);
+    }
 };

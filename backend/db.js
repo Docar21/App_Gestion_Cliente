@@ -1,7 +1,7 @@
 import mysql from "mysql";
 
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host:"localhost",
     user:"root",
     password:"",
