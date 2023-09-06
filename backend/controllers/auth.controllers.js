@@ -3,9 +3,10 @@ import db from '../db.js';
 export const register = async (req,res)=>{
     const {Ci, Nombre, App, Apm,Username, Pasword}=req.body;
     try {
-        const {userSaved} =await db.query("call crear_usuario(?,?,?,?,?,?)",[Ci, Nombre, App, Apm,Username, Pasword])
+        const {userSaved}=await db.query("call crear_usuario(?,?,?,?,?,?)",[Ci, Nombre, App, Apm,Username, Pasword])
+        //await db.query("INSERT INTO persona (Ci, Nombre, App, Apm,created_at) VALUES (?,?,?,?, NOW())",[Ci, Nombre, App, Apm])
         //console.log(Ci, Nombre, App, Apm,Username, Pasword);
-        res.send({userSaved});
+        res.json({userSaved});
     } catch (error) {
         console.log(error);
         
