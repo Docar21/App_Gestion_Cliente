@@ -1,6 +1,15 @@
 import mysql from "mysql";
 
-export const db= async()=>{
+
+const db = mysql.createConnection({
+    host:"localhost",
+    user:"root",
+    password:"",
+    database:"bd_gestion_cliente"
+})
+export default db
+/*
+export const db = async()=>{
     try {
        await mysql.createConnection({
             host:"localhost",
@@ -12,7 +21,6 @@ export const db= async()=>{
     } catch (error) {
         console.log(error)
     }
-} 
-
+} */
 
  
