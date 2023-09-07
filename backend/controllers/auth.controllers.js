@@ -56,9 +56,7 @@ export const login= async (req, res, next)=>{
         const resultElements = await validarUsuario(req.body);
         //res.json({resultElements});
         if(!(typeof(resultElements[0][0])==='undefined')) {  
-            
             const token = await createAccessToken({id:resultElements[0][0].Id_usuario});
-            
             res.cookie("token",token);
             res.json({resultElements});
             console.log(token);
@@ -74,7 +72,7 @@ export const login= async (req, res, next)=>{
 
 
 
-export const logout= async (req, res, next)=>{
+export const logout= (req, res, next)=>{
     res.cookie('token','', {
         expires:new Date(0),
     });

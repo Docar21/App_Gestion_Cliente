@@ -1,10 +1,5 @@
 import db from '../db.js';
-/*
-export const getCustomer = async (req,res)=>{
-    const [rows] = await db.query("call mostrar_clientes()");
-    res.send(rows);
-};
-*/
+
 const SelectAllElements = () =>{
     return new Promise((resolve, reject)=>{
         db.query('call mostrar_clientes()',  (error, elements)=>{
@@ -17,9 +12,10 @@ const SelectAllElements = () =>{
 };
 
 
-export const getCustomer= async (req, res, next)=>{
+export const getCustomer= (req, res, next)=>{
+    //console.log(res.send('Clientes'))
     try {
-        const resultElements = await SelectAllElements();
+        const resultElements = SelectAllElements();
         res.status(200).json({elements: resultElements}); // send a json response
     } catch(e) {
         console.log(e); // console log the error so we can see it in the console
