@@ -41,6 +41,7 @@ const validarUsuario = (req) =>{
 
 
 export const register= async (req, res, next)=>{
+   // console.log("Estoy en Register")
     try {
         const resultElements = await registerUser(req.body);
         res.json({elements: resultElements}); 

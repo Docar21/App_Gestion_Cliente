@@ -41,7 +41,7 @@ export const clienteSchema=z.object({
 });
 
 export const registerSchema=z.object({
-    Ci: z.number({
+    Ci: z.string({
         required_error: 'Ci is required'
     }),
     Nombre: z.string({
