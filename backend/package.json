@@ -15,7 +15,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

@@ -13,7 +13,7 @@ export const authRequired = (req, res, next)=>{
                  message:"Token Invalido"
               });
             }else{
-                console.log(user)
+                //console.log(user)
                 next();
             }
     })
